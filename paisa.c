@@ -28,3 +28,32 @@ void agregar_orden(Orden* ordenes, int indice, int es_mesa) {
 
     printf("Ingrese la cantidad: ");
     scanf("%d", &cantidad);
+    
+        // Buscar el precio del platillo
+    switch(platillo[0]) {
+        case '1':
+            precio_unitario = 10.00;
+            break;
+        case '2':
+            precio_unitario = 25.00;
+            break;
+        case '3':
+            precio_unitario = 30.00;
+            break;
+        case '4':
+            precio_unitario = 40.00;
+            break;
+        case '5':
+            precio_unitario = 15.00;
+            break;
+        default:
+            printf("Platillo no válido\n");
+            return;
+    }
+    
+    // Pedir el número de mesa solo para las órdenes en mesa
+    int mesa = 0;
+    if (es_mesa) {
+        printf("Ingrese el numero de mesa: ");
+        scanf("%d", &mesa);
+    }
