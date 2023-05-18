@@ -3,8 +3,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*Vamos a definir nuestra estructura principal, donde se van a almacenar los datos de las variables
-que se utilizarán a lo largo de todo el código, además de arreglos de strings*/
+/*
+Documentación
+    Authors: Camacho Bolaños Andrés, Corona Márquez Juan Carlos,
+    Díaz Balbuena Daniel Alberto, Reyes Oliveros Ángel Esteban
+    Date: 17/Mayo/2023
+    Description: "Paisa System" Programa en lenguaje C que ayudará a la gestión
+    de las órdenes en una taquería  
+*/
+
+/*Se define la struct principal, donde se van a almacenar los datos de las variables
+que se utilizarán a lo largo de todo el código, además de uso de strings*/
 typedef struct {
     char platillo[20];
     char nombre_cliente[50];
@@ -15,8 +24,10 @@ typedef struct {
 Orden;
 char platillo[20];
 
-/*Esta función nos va a permitir mostrar en pantalla la información que será de utilidad 
-para el mesero y almacenar los datos ingresados en las variables correspondientes*/
+/*
+Función: agregar_orden
+Objetivo: permitir a los meseros ingresar los datos de cada orden de la taquería
+*/
 void agregar_orden(Orden* ordenes, int indice, int es_mesa) {
     char platillo[20], nombre_cliente[50];
     int cantidad;
@@ -91,7 +102,11 @@ void agregar_orden(Orden* ordenes, int indice, int es_mesa) {
 
 }
 
-/*Esta función se llama en caso de que el mesero seleccione consultar el menú*/
+/*
+Función: consultar_precios
+Objetivo: permitir a los meseros consultar el menú con los platillos disponibles y sus precios
+*/
+
 void consultar_precios() {
 
     printf("----- MENU -----\n");
@@ -108,8 +123,11 @@ void consultar_precios() {
 
 }
 
-/*Todos los datos ingresados previamente y que se guardaron en la estructura de datos, 
-funcionarán como argumentos en esta nueva función, la cual se utilizará para los archivos .csv*/
+/*Todos los datos ingresados previamente (en void agregar_orden) y que se guardaron en 
+la estructura de datos, funcionarán como argumentos en esta nueva función, la cual se utilizará 
+para generar archivos .csv
+*/
+
 void guardar_datos_csv(char* nombre_archivo, Orden* ordenes, int cantidad_ordenes) {
 
      /*Crear un nuevo archivo vacío o sobrescribir el existente con la información 
