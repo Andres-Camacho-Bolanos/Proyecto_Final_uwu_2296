@@ -57,3 +57,85 @@ void agregar_orden(Orden* ordenes, int indice, int es_mesa) {
         printf("Ingrese el numero de mesa: ");
         scanf("%d", &mesa);
     }
+
+    // Calcular el precio total
+
+    precio_total = precio_unitario * cantidad;
+
+    
+
+    // guardar los datos ingresados en la estructura
+
+    strcpy(ordenes[indice].platillo, platillo);
+
+    strcpy(ordenes[indice].nombre_cliente, nombre_cliente);
+
+    ordenes[indice].cantidad = cantidad;
+
+    ordenes[indice].precio_total = precio_total;
+
+    ordenes[indice].mesa = mesa;
+
+}
+
+void consultar_precios() {
+
+    printf("----- MENU -----\n");
+
+    printf("1. Tacos (Pastor, Suadero, Campechano, Tripa) - $10.00\n");
+
+    printf("2. Gorditas (Pastor, Suadero) - $25.00\n");
+
+    printf("3. Gringas - $30.00\n");
+
+    printf("4. Tortas (Pastor, Suadero) - $40.00\n");
+
+    printf("5. Refresco: (Coca cola, Pepsi, Manzanita, Sangria, 7-UP) - $15.00\n");
+
+}
+
+void guardar_datos_csv(char* nombre_archivo, Orden* ordenes, int cantidad_ordenes) {
+
+    // Crear un nuevo archivo vacío o sobrescribir el existente
+
+    FILE* archivo_csv = fopen(nombre_archivo, "w");
+
+    if (archivo_csv == NULL) {
+
+        printf("Error al abrir el archivo. %s.\n", nombre_archivo);
+
+        return;
+
+    }
+
+    // Escribir el encabezado
+
+    fprintf(archivo_csv, "Platillo,Nombre cliente,Cantidad,Precio total,Mesa\n");
+
+    // Escribir los datos de cada orden en una nueva línea del archivo
+
+  int i;  
+
+  for (i = 0; i < cantidad_ordenes; i++) {
+
+        fprintf(archivo_csv, "%s,%s,%d,%.2f", ordenes[i].platillo, ordenes[i].nombre_cliente, ordenes[i].cantidad, ordenes[i].precio_total);
+
+        // Si la orden está en una mesa, agregar el número de mesa al final de la línea
+
+        if (ordenes[i].mesa > 0) {
+
+            fprintf(archivo_csv, ",%d\n", ordenes[i].mesa);
+
+        } else {
+
+            fprintf(archivo_csv, "\n");
+
+        }
+
+    }
+
+    // Cerrar el archivo
+
+    fclose(archivo_csv);
+
+}
