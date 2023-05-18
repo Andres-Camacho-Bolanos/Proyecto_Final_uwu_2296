@@ -139,3 +139,63 @@ void guardar_datos_csv(char* nombre_archivo, Orden* ordenes, int cantidad_ordene
     fclose(archivo_csv);
 
 }
+/* añadiendo la funcion principal donde se llamará a las funciones previamente declaradas*/
+
+int main() {
+    Orden mesa[5];
+    Orden domicilio[5];
+    int opcion, tipo_orden, n_mesa;
+    int num_ordenes_mesa = 0, num_ordenes_domicilio = 0;
+
+    printf("Taqueria El Paisa.inc.\n");
+    printf("Todos los derechos estan reservados.\n");
+    printf("Bienvenido. ¿Que desea hacer?\n");
+    printf("1. Registrar orden en mesa.\n");
+    printf("2. Registrar orden para llevar.\n");
+    printf("3. Consultar menu y precios.\n");
+    printf("4. Salir del programa.\n");
+
+    do {
+        printf("\nSeleccione una opcion: ");
+        scanf("%d", &opcion);
+
+        switch (opcion) {
+            case 1: // mesa
+                if (num_ordenes_mesa == 5) {
+                    printf("Lo sentimos, no se pueden registrar mas ordenes en mesa.\n");
+                } else {
+                    agregar_orden(mesa, num_ordenes_mesa, 1);
+                    num_ordenes_mesa++;
+                    guardar_datos_csv("ordenes_locales.csv", mesa, num_ordenes_mesa);
+                }
+                break;
+
+            case 2: // domicilio
+                if (num_ordenes_domicilio == 5) {
+                    printf("Lo sentimos, no se pueden registrar mas ordenes para llevar.\n");
+                } else {
+                    agregar_orden(domicilio, num_ordenes_domicilio, 0);
+                    num_ordenes_domicilio++;
+                    guardar_datos_csv("domicilio.csv", domicilio, num_ordenes_domicilio);
+                }
+                break;
+
+            case 3:
+                consultar_precios();
+                break;
+
+            case 4:
+                guardar_datos_csv("ordenes_locales.csv", mesa, num_ordenes_mesa);
+                guardar_datos_csv("domicilio.csv", domicilio, num_ordenes_domicilio);
+                printf("Gracias por utilizar el programa.\n");
+                break;
+
+            default:
+                printf("Opcion no valida. Por favor seleccione una opcion valida.\n");
+                break;
+        }
+    } while (opcion != 4);
+
+    return 0;
+}
+
