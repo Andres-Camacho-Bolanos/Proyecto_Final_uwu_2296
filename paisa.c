@@ -1,6 +1,10 @@
-#include <stdio.h>
+//Se incluyen las bibliotecas estándar para C, además de string para poder manejarlos posteriormente.
+#include <stdio.h> 
 #include <stdlib.h>
 #include <string.h>
+
+/*Vamos a definir nuestra estructura principal, donde se van a almacenar los datos de las variables
+que se utilizarán a lo largo de todo el código, además de arreglos de strings*/
 typedef struct {
     char platillo[20];
     char nombre_cliente[50];
@@ -10,11 +14,17 @@ typedef struct {
 }
 Orden;
 char platillo[20];
+
+/*Esta función nos va a permitir mostrar en pantalla la información que será de utilidad 
+para el mesero y almacenar los datos ingresados en las variables correspondientes*/
 void agregar_orden(Orden* ordenes, int indice, int es_mesa) {
     char platillo[20], nombre_cliente[50];
     int cantidad;
-    float precio_total, precio_unitario;
+    float precio_total, precio_unitario; /*Precio unitario hace referencia a la variable que almacena el precio individual por cada platillo o bebida, 
+    mientras que Precio total va a almacenar la suma total de los precios según la cantidad que hayan pedido*/
 
+    /*Estos mensajes representarán el cuerpo general del programa una vez que se seleccione ingresar una orden, 
+    independientemente si se trata de consumo local o pedido a domicilio*/
     printf("Ingrese el platillo:\n");
     printf("1. Tacos (Pastor, Suadero, Campechano, Tripa).\n");
     printf("2. Gorditas (Pastor, Suadero).\n");
@@ -29,7 +39,8 @@ void agregar_orden(Orden* ordenes, int indice, int es_mesa) {
     printf("Ingrese la cantidad: ");
     scanf("%d", &cantidad);
     
-        // Buscar el precio del platillo
+           /*En este Switch case se va a colocar por casos el precio de cada platillo de acuerdo a cómo están ordenados en los printf del 
+           cuerpo general en agregar orden. Lo que va a hacer es buscar el precio del platillo correspondiente*/
     switch(platillo[0]) {
         case '1':
             precio_unitario = 10.00;
@@ -51,21 +62,23 @@ void agregar_orden(Orden* ordenes, int indice, int es_mesa) {
             return;
     }
     
-    // Pedir el número de mesa solo para las órdenes en mesa
+   /*Si el mesero selecciona consumo local, que en este caso funcionará como argumento en el main, 
+   el programa va a pedir el número de mesa como dato adicional*/
+
+    /*En este caso declaramos la variable mesa y la inicializamos en 0, con el fin de que el mesero seleccione 
+    el número de aquella que sea asignada al cliente y el programa no permita que se repitan*/
     int mesa = 0;
     if (es_mesa) {
         printf("Ingrese el numero de mesa: ");
         scanf("%d", &mesa);
     }
 
-    // Calcular el precio total
-
+    //Como se mencionó anteriormente, va a calcular el precio total de acuerdo a la cantidad y el tipo de platillo seleccionado
     precio_total = precio_unitario * cantidad;
 
     
 
-    // guardar los datos ingresados en la estructura
-
+   /*Se van a guardar los datos ingresados en la estructura de datos*/
     strcpy(ordenes[indice].platillo, platillo);
 
     strcpy(ordenes[indice].nombre_cliente, nombre_cliente);
@@ -78,6 +91,7 @@ void agregar_orden(Orden* ordenes, int indice, int es_mesa) {
 
 }
 
+/*Esta función se llama en caso de que el mesero seleccione consultar el menú*/
 void consultar_precios() {
 
     printf("----- MENU -----\n");
@@ -94,10 +108,12 @@ void consultar_precios() {
 
 }
 
+/*Todos los datos ingresados previamente y que se guardaron en la estructura de datos, 
+funcionarán como argumentos en esta nueva función, la cual se utilizará para los archivos .csv*/
 void guardar_datos_csv(char* nombre_archivo, Orden* ordenes, int cantidad_ordenes) {
 
-    // Crear un nuevo archivo vacío o sobrescribir el existente
-
+     /*Crear un nuevo archivo vacío o sobrescribir el existente con la información 
+     que se vaya actualizando de la estructura de datos */
     FILE* archivo_csv = fopen(nombre_archivo, "w");
 
     if (archivo_csv == NULL) {
@@ -108,20 +124,20 @@ void guardar_datos_csv(char* nombre_archivo, Orden* ordenes, int cantidad_ordene
 
     }
 
-    // Escribir el encabezado
-
+     //Se va a escribir el encabezado para comprender a que corresponde cada dato
     fprintf(archivo_csv, "Platillo,Nombre cliente,Cantidad,Precio total,Mesa\n");
 
-    // Escribir los datos de cada orden en una nueva línea del archivo
-
+  //Se van a escribir los datos de cada orden en una nueva línea del archivo .csv
+    
+/*En este caso la variable del contador se declaró afuera, ya que el compilador 
+marcaba errores por la versión que se estaba utilizando*/ 
   int i;  
 
   for (i = 0; i < cantidad_ordenes; i++) {
 
         fprintf(archivo_csv, "%s,%s,%d,%.2f", ordenes[i].platillo, ordenes[i].nombre_cliente, ordenes[i].cantidad, ordenes[i].precio_total);
 
-        // Si la orden está en una mesa, agregar el número de mesa al final de la línea
-
+  // Si la orden está en una mesa, se va a agregar el número de mesa al final de la línea
         if (ordenes[i].mesa > 0) {
 
             fprintf(archivo_csv, ",%d\n", ordenes[i].mesa);
@@ -135,18 +151,20 @@ void guardar_datos_csv(char* nombre_archivo, Orden* ordenes, int cantidad_ordene
     }
 
     // Cerrar el archivo
-
     fclose(archivo_csv);
 
 }
 /* añadiendo la funcion principal donde se llamará a las funciones previamente declaradas*/
 
+//Esta será nuestra función principal
 int main() {
     Orden mesa[5];
     Orden domicilio[5];
-    int opcion, tipo_orden, n_mesa;
-    int num_ordenes_mesa = 0, num_ordenes_domicilio = 0;
+    int opcion, tipo_orden, n_mesa; //Se declaran variables que definirán si el tipo de órden es para llevar o en domicilio
+    int num_ordenes_mesa = 0, num_ordenes_domicilio = 0; //Ambos se inicializan en 0, con tal de que el personal del Paisa no tenga sobrecapacidad
 
+    /*Estos mensajes constituyen el cuerpo principal del programa al ejecutarlo, 
+    con el fin de que el mesero sepa qué opción seleccionar de acuerdo a lo que pida el cliente*/   
     printf("Taqueria El Paisa.inc.\n");
     printf("Todos los derechos estan reservados.\n");
     printf("Bienvenido. ¿Que desea hacer?\n");
@@ -155,11 +173,12 @@ int main() {
     printf("3. Consultar menu y precios.\n");
     printf("4. Salir del programa.\n");
 
-    do {
+    do { /*Este bucle realizará una instrucción de acuerdo a la opción seleccionada. 
+    Mientras no se seleccione 4, el programa seguirá abierto*/
         printf("\nSeleccione una opcion: ");
         scanf("%d", &opcion);
 
-        switch (opcion) {
+        switch (opcion) { //Se limitan el numero de ordenes que se pueden tener al mismo tiempo
             case 1: // mesa
                 if (num_ordenes_mesa == 5) {
                     printf("Lo sentimos, no se pueden registrar mas ordenes en mesa.\n");
